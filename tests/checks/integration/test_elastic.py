@@ -9,6 +9,7 @@ import socket
 
 # 3p
 from nose.plugins.attrib import attr
+from nose.plugins.skip import SkipTest
 import requests
 
 # project
@@ -515,6 +516,7 @@ class TestElastic(AgentCheckTest):
         self.assertEquals(c.ssl_key, "/path/to/cert.key")
 
     def test_health_event(self):
+        raise SkipTest("This test doesn't apply to Server Density.")
         dummy_tags = ['foo:bar', 'elastique:recherche']
         server_tags = ['cluster_name:elasticsearch']
 
