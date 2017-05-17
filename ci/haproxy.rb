@@ -84,7 +84,7 @@ namespace :ci do
       end
       if ENV['SKIP_CLEANUP']
       #  puts 'Skipping cleanup, disposable environments are great'.yellow
-      #else
+      #  else
         puts 'Cleaning up'
         Rake::Task["#{flavor.scope.path}:cleanup"].invoke
       end
