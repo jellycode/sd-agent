@@ -8,6 +8,10 @@ cache:
     - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
     - vendor/cache
 
+os:
+  - linux
+  - osx
+
 env:
   global:
     - CONCURRENCY=2
@@ -82,12 +86,8 @@ env:
     #- TRAVIS_FLAVOR=varnish FLAVOR_VERSION=4.0.3
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.4.7
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.3.6
-  fast_finish: true
-  include:
-    - os: osx
-      language: generic
-      python:
-      env: TRAVIS_FLAVOR=default
+    allow_failures:
+      - os: osx
 
 before_install: echo "OVERRIDING TRAVIS STEPS"
 install: echo "OVERRIDING TRAVIS STEPS"
