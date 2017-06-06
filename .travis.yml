@@ -7,13 +7,14 @@ branches:
     - /^\d+\.\d+\.\d+/ # tags format to we get releases pushed.
     - travis-stages-test
 
+python:
+  - 2.6
+  - 2.7
+
 jobs:
   include:
     - stage: Test
       language: python
-      python:
-        - 2.6
-        - 2.7
       env:
         global:
           - CONCURRENCY=2
@@ -88,6 +89,9 @@ jobs:
           #- TRAVIS_FLAVOR=varnish FLAVOR_VERSION=4.0.3
           #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.4.7
           #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.3.6
+      before_install: echo "OVERRIDING TRAVIS STEPS"
+      install: echo "OVERRIDING TRAVIS STEPS"
+      before_script: echo "OVERRIDING TRAVIS STEPS"
       script: travis_retry ./.travis/build_installer.sh
       after_failure:
         - echo "Logs from installation process come here / DEBUG LOGS"
