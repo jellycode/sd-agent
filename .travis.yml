@@ -23,6 +23,8 @@ env:
     - DD_CASHER_DIR=/tmp/casher
     - AGENT_VERSION=2.1.6
   matrix:
+    allow_failures:
+    - os: osx
     - TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=core_integration
     #- TRAVIS_FLAVOR=checks_mock
@@ -86,8 +88,7 @@ env:
     #- TRAVIS_FLAVOR=varnish FLAVOR_VERSION=4.0.3
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.4.7
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.3.6
-    allow_failures:
-      - os: osx
+
 
 before_install: echo "OVERRIDING TRAVIS STEPS"
 install: echo "OVERRIDING TRAVIS STEPS"
