@@ -5,6 +5,7 @@ branches:
     - master
     - /^\d+\.\d+\.x$/  # release forked patches branch.
     - /^\d+\.\d+\.\d+/ # tags format to we get releases pushed.
+    - travis-stages-test
 
 language: python
 python:
