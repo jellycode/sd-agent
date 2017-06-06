@@ -7,10 +7,7 @@ branches:
     - /^\d+\.\d+\.\d+/ # tags format to we get releases pushed.
     - travis-stages-test
 
-language: python
-python:
-  - 2.6
-  - 2.7
+
 
 matrix:
   fast_finish: true
@@ -28,6 +25,10 @@ matrix:
 jobs:
   include:
     - stage: Test
+      language: python
+      python:
+        - 2.6
+        - 2.7
       env:
         global:
           - CONCURRENCY=2
@@ -107,23 +108,17 @@ jobs:
       before_install: echo "OVERRIDING TRAVIS STEPS"
       install: echo "OVERRIDING TRAVIS STEPS"
       before_script: echo "OVERRIDING TRAVIS STEPS"
-
-      script:
-        - travis_retry ./.travis/build_installer.sh
-
+      script: travis_retry ./.travis/build_installer.sh
       after_failure:
         - echo "Logs from installation process come here / DEBUG LOGS"
         - cat /tmp/ci.log
-
     - stage: Deploy
       script: echo Deploy
       python: 2.7
       env: TRAVIS_FLAVOR=default
-
       notifications:
         slack:
           secure: N7WQuQNLn4wJqGHnLmTOZL18NGdr7vKNyHSV0TnXcgijnoqt+yxOq7mEu+h/KLgflAQObyKF8A3ChmbTB99xL6fR8xYVvxLSPk7+g9PU6Vf7absN9yY0rUQfXcPLVyYsZ11R1UqkizYbxc9B2A588S48/TMP2KB6LnII+PNajyg=
-
       deploy:
         - provider: releases
           api_key:
