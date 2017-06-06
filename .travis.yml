@@ -8,10 +8,6 @@ cache:
     - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
     - vendor/cache
 
-os:
-  - linux
-  - osx
-
 env:
   global:
     - CONCURRENCY=2
@@ -23,8 +19,11 @@ env:
     - DD_CASHER_DIR=/tmp/casher
     - AGENT_VERSION=2.1.6
   matrix:
-    allow_failures:
+    include:
     - os: osx
+      language: generic
+      python:
+      env: TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=core_integration
     #- TRAVIS_FLAVOR=checks_mock
@@ -88,6 +87,7 @@ env:
     #- TRAVIS_FLAVOR=varnish FLAVOR_VERSION=4.0.3
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.4.7
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.3.6
+  fast_finish: true
 
 
 before_install: echo "OVERRIDING TRAVIS STEPS"
