@@ -95,6 +95,26 @@ after_failure:
 
 jobs:
   include:
+    - stage: Test
+      python:
+        - 2.6
+        - 2.7
+      env:
+        global:
+          - CONCURRENCY=2
+          - NOSE_FILTER="not windows"
+          - INTEGRATIONS_DIR=$HOME/embedded
+          - PIP_CACHE=$HOME/.cache/pip
+          - SKIP_CLEANUP=true
+          - VOLATILE_DIR=/tmp
+          - DD_CASHER_DIR=/tmp/casher
+          - AGENT_VERSION=2.1.6
+        matrix:
+          - TRAVIS_FLAVOR=default
+      script: travis_retry ./.travis/build_installer.sh
+      after_failure:
+        - echo "Logs from installation process come here / DEBUG LOGS"
+        - cat /tmp/ci.log
     - stage: deploy
       script: echo Deploy
       # Keep in mind to overwrite these here
