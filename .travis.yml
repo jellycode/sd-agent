@@ -13,14 +13,15 @@ python:
   - 2.6
   - 2.7
 env:
-  - CONCURRENCY=2
-  - NOSE_FILTER="not windows"
-  - INTEGRATIONS_DIR=$HOME/embedded
-  - PIP_CACHE=$HOME/.cache/pip
-  - SKIP_CLEANUP=true
-  - VOLATILE_DIR=/tmp
-  - DD_CASHER_DIR=/tmp/casher
-  - AGENT_VERSION=2.1.6
+  global:
+    - CONCURRENCY=2
+    - NOSE_FILTER="not windows"
+    - INTEGRATIONS_DIR=$HOME/embedded
+    - PIP_CACHE=$HOME/.cache/pip
+    - SKIP_CLEANUP=true
+    - VOLATILE_DIR=/tmp
+    - DD_CASHER_DIR=/tmp/casher
+    - AGENT_VERSION=2.1.6
 
 jobs:
   include:
