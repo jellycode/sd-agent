@@ -20,10 +20,10 @@ env:
     - AGENT_VERSION=2.1.6
   matrix:
     - TRAVIS_FLAVOR=default
-    - TRAVIS_FLAVOR=core_integration
+    #- TRAVIS_FLAVOR=core_integration
     #- TRAVIS_FLAVOR=checks_mock
     #- TRAVIS_FLAVOR=activemq
-    - TRAVIS_FLAVOR=apache
+    #- TRAVIS_FLAVOR=apache
     #- TRAVIS_FLAVOR=cassandra FLAVOR_VERSION=2.0.13
     #- TRAVIS_FLAVOR=cassandra FLAVOR_VERSION=2.1.3
     #- TRAVIS_FLAVOR=couchdb
