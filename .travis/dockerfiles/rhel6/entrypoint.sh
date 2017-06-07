@@ -13,6 +13,7 @@ for dir in SOURCES BUILD RPMS SRPMS; do
     [ -d $dir ] || mkdir $dir
 done
 cd /root/build/src
+git clone https://github.com/serverdensity/sd-agent.git
 sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' sd-agent/config.py)
 tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz sd-agent
 cp -a sd-agent/packaging/el/{SPECS,inc,description} /root/el
