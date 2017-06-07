@@ -97,5 +97,6 @@ jobs:
   include:
     - stage: deploy
       script: travis_retry ./.travis/build_packages.sh
-      # Keep in mind to overwrite these here
+      services:
+        - docker
       python: 2.7
