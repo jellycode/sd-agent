@@ -1,13 +1,14 @@
 #!/bin/bash
 set -ev
 
+pwd
 ls -alh
-cd sd-agent/
 ls -alh
-cd sd-agent/.travis/dockerfiles
+cd .travis/dockerfiles
 for D in *; do
     if [ -d "${D}" ]; then
         docker build "${D}"/Dockerfile -t serverdensity:${D}  # your processing here
+        docker run
     fi
 done
-docker ps -a
+docker images -a
