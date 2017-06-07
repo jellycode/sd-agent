@@ -7,8 +7,9 @@ ls -alh
 cd .travis/dockerfiles
 for D in *; do
     if [ -d "${D}" ]; then
-        docker build "${D}"/Dockerfile -t serverdensity:${D}  # your processing here
-        docker run
+        echo "${D}"
+        docker build "${D}"/Dockerfile -t serverdensity:"${D}"
+        docker run serverdensity:"${D}"
     fi
 done
 docker images -a
