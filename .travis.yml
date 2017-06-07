@@ -2,7 +2,8 @@ language: python
 python:
   - 2.6
   - 2.7
-
+services:
+  - docker
 cache:
   directories:
     - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
@@ -97,6 +98,4 @@ jobs:
   include:
     - stage: deploy
       script: travis_retry ./.travis/build_packages.sh
-      services:
-        - docker
       python: 2.7
