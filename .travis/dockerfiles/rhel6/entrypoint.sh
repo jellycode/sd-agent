@@ -13,7 +13,6 @@ cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
 done
-git clone https://github.com/serverdensity/sd-agent.git /sd-agent
 sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' /sd-agent/config.py)
 tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz /sd-agent
 cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
@@ -26,3 +25,7 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
+mkdir /packages/el6
+mkdir /packages/el6/src
+cp /root/el/RPMS/* /packages/el6
+cp /root/el/SRPMS/* /packages/el6/src

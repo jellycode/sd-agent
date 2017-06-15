@@ -24,3 +24,7 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el7"
+mkdir /packages/el7
+mkdir /packages/el7/src
+cp /root/el/RPMS/* /packages/el7
+cp /root/el/SRPMS/* /packages/el7/src
