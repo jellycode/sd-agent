@@ -1,16 +1,12 @@
 #!/bin/bash
 set -ev
 
-pwd
-ls -alh
 cd .travis/dockerfiles
-for D in *; do
-    if [ -d "${D}" ]; then
-        echo "${D}"
-        cd "${D}"
-        pwd
-        docker build -t serverdensity:"${D}" .
-        docker run serverdensity:"${D}"
-    fi
-done
+
+for d in * ; do (echo "$d" && cd "$d" && docker build -t serverdensity:"${d}" . && docker run serverdensity:"${d}"); done
+
+cd $TRAVIS_BUILD_DIR
+
+pwd
+
 docker images -a
