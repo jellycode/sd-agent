@@ -1,5 +1,5 @@
 FROM centos:6
-RUN yum -y install yum-utils rpm-build redhat-rpm-config make gcc  python-devel wget curl libyaml-devel curl-devel postgresql-devel tar
+RUN yum -y install yum-utils rpm-build redhat-rpm-config make gcc  python-devel wget curl libyaml-devel curl-devel postgresql-devel tar git
 
 RUN ( grep -q :20: /etc/group || groupadd -g 20 osx_staff ) && \
     ( grep -q :501: /etc/passwd || useradd -u 501 -g 20 osx_user ) && \

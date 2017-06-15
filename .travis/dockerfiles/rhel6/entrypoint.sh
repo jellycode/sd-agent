@@ -6,22 +6,21 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
-
 mkdir /root/el
 cd /root/el
-for dir in SOURCES BUILD RPMS SRPMS; do
+for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
 done
-cd /root/build/src
-git clone https://github.com/serverdensity/sd-agent.git
-sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' sd-agent/config.py)
-tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz sd-agent
-cp -a sd-agent/packaging/el/{SPECS,inc,description} /root/el
+git clone https://github.com/serverdensity/sd-agent.git /sd-agent
+sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' /sd-agent/config.py)
+tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz /sd-agent
+cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
 cd /root/el
 chown -R `id -u`:`id -g` /root/el
 function build {
     rpmdir=/root/build/result/$1
     yum-builddep -y SPECS/sd-agent-$1.spec
-    rpmbuild -ba SPECS/sd-agent-$1.spec &&     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
+    rpmbuild -ba SPECS/sd-agent-$1.spec && \
+    (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
