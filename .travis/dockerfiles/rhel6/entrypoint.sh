@@ -6,6 +6,8 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
+ls -alh
+pwd
 mkdir /root/el
 cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
