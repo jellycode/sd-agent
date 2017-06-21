@@ -7,6 +7,9 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_path ~/.gnupg
 EOF_MACROS
 ls -alh
+ls /
+ls /sd-agent
+ls /packages
 pwd
 mkdir /root/el
 cd /root/el
