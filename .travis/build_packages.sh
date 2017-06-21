@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ev
 
+cd $TRAVIS_BUILD_DIR
+
+pwd
+ls -alh
+
 cd .travis/dockerfiles
 
 sudo mkdir /packages
