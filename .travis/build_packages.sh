@@ -7,6 +7,10 @@ sudo mkdir /packages
 
 for d in * ; do (echo "$d" && cd "$d" && docker build -t serverdensity:"${d}" . && docker run serverdensity:"${d}" -v /packages:/packages -v `pwd`:/sd-agent:rw); done
 
+cd $TRAVIS_BUILD_DIR
+
+for d in .travis/dockerfiles ; do ( && docker run serverdensity:"${d}" -v /packages:/packages -v `pwd`:/sd-agent:rw); done
+
 find /packages
 
 cd $TRAVIS_BUILD_DIR
