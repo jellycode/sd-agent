@@ -9,7 +9,7 @@ for d in * ; do (echo "$d" && cd "$d" && docker build -t serverdensity:"${d}" . 
 
 cd $TRAVIS_BUILD_DIR
 
-for d in .travis/dockerfiles ; do ( docker run serverdensity:"${d}" -v /packages:/packages -v `pwd`:/sd-agent:rw); done
+for d in .travis/dockerfiles/* ; do ( docker run serverdensity:"${d}" -v /packages:/packages -v ../../`pwd`:/sd-agent:rw && cd ..); done
 
 find /packages
 
