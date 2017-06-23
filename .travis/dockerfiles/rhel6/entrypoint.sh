@@ -6,11 +6,10 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
-ls -alh
-ls /
-ls /sd-agent
 pwd
-mkdir /root/el
+if [ ! -d /root/el ]; then
+    mkdir /root/el
+fi
 cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
@@ -27,7 +26,12 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
-mkdir /packages/el6
-mkdir /packages/el6/src
+if [ ! -d /packages/el6 ]; then
+    mkdir /packages/el6
+fi
+
+if [ ! -d /packages/el6/src ]; then
+    mkdir /packages/el6/src
+fi
 cp /root/el/RPMS/* /packages/el6
 cp /root/el/SRPMS/* /packages/el6/src
