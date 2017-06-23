@@ -7,7 +7,7 @@ set -ev
 cd .travis/dockerfiles
 
 if [ ! -d "$PACKAGES_DIR" ]; then
-    mkdir "$PACKAGES_DIR"
+    sudo mkdir "$PACKAGES_DIR"
 fi
 
 for d in * ; do (echo "$d" && cd "$d" && docker build -t serverdensity:"${d}" . && cd ..); done
