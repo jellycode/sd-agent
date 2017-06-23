@@ -6,7 +6,7 @@ set -ev
 
 cd .travis/dockerfiles
 
-if [ -d "$PACKAGES_DIR" ]; then
+if [ ! -d "$PACKAGES_DIR" ]; then
     mkdir "$PACKAGES_DIR"
 fi
 
