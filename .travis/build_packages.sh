@@ -11,7 +11,7 @@ cd $TRAVIS_BUILD_DIR
 
 dockerfile_dir=".travis/dockerfiles/"
 
-for d in .travis/dockerfiles/* ; do ( docker run serverdensity:"${d#$dockerfile_dir}" -v /packages:/packages -v `pwd`:/sd-agent:rw); done
+for d in .travis/dockerfiles/* ; do (echo "${d#$dockerfile_dir}" &&  docker run serverdensity:"${d#$dockerfile_dir}" -v /packages:/packages -v "${pwd}":/sd-agent:rw); done
 
 find /packages
 
