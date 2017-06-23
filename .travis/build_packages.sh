@@ -1,6 +1,10 @@
 #!/bin/bash
 set -ev
 
+echo $PWD
+
+echo "${pwd}"
+
 cd .travis/dockerfiles
 
 sudo mkdir /packages
