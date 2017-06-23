@@ -12,7 +12,7 @@ OS=~/build/$TRAVIS_REPO_SLUG
 chmod -R a+w $OS
 dockerfile_dir=".travis/dockerfiles/"
 
-for d in .travis/dockerfiles/* ; do (echo "${d#$dockerfile_dir}" && sudo docker run serverdensity:"${d#$dockerfile_dir}" --volume=/home/travis/build/serverdensity/sd-agent:/sd-agent:rw --privileged); done
+for d in .travis/dockerfiles/* ; do (echo "${d#$dockerfile_dir}" && sudo docker run --volume=/home/travis/build/serverdensity/sd-agent:/sd-agent:rw --privileged serverdensity:"${d#$dockerfile_dir}" ); done
 
 find /packages
 
