@@ -16,7 +16,7 @@ docker images -a
 
 cd $TRAVIS_BUILD_DIR
 
-for d in .travis/dockerfiles/* ; do (echo "${d#$DOCKERFILE_DIR}" && sudo docker run --volume=/home/travis/build/serverdensity/sd-agent:/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d#$DOCKERFILE_DIR}" ); done
+for d in .travis/dockerfiles/* ; do (echo "${d#$DOCKERFILE_DIR}" && sudo docker run --volume=/home/travis/build/serverdensity/sd-agent:/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d#$DOCKERFILE_DIR}" && ls /packages); done
 
 find /packages
 

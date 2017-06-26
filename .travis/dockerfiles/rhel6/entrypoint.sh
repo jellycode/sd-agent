@@ -33,5 +33,5 @@ fi
 if [ ! -d /packages/el6/src ]; then
     mkdir /packages/el6/src
 fi
-cp /root/el/RPMS/* /packages/el6
-cp /root/el/SRPMS/* /packages/el6/src
+cp -r /root/el/RPMS/* /packages/el6
+cp -r /root/el/SRPMS/* /packages/el6/src
