@@ -8,10 +8,10 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 EOF_MACROS
 mkdir /root/el
 cd /root/el
-for dir in SOURCES BUILD RPMS SRPMS; do
+for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
 done
-pwd
+git clone https://github.com/serverdensity/sd-agent.git /sd-agent
 sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' /sd-agent/config.py)
 tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz /sd-agent
 cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
@@ -23,13 +23,13 @@ function build {
     rpmbuild -ba SPECS/sd-agent-$1.spec && \
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
-build "el7"
-if [ ! -d /packages/el7 ]; then
-    mkdir /packages/el7
+build "el6"
+if [ ! -d /packages/el6 ]; then
+    mkdir /packages/el6
 fi
 
-if [ ! -d /packages/el7/src ]; then
-    mkdir /packages/el7/src
+if [ ! -d /packages/el6/src ]; then
+    mkdir /packages/el6/src
 fi
-cp -r /root/el/RPMS/* /packages/el7
-cp -r /root/el/SRPMS/* /packages/el7/src
+cp -r /root/el/RPMS/* /packages/el6
+cp -r /root/el/SRPMS/* /packages/el6/src
