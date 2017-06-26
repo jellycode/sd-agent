@@ -25,7 +25,9 @@ function build {
     rpmbuild -ba SPECS/sd-agent-$1.spec && \
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
+echo -en 'travis_fold:start:build_rhel6\\r'
 build "el6"
+echo -en 'travis_fold:end:build_rhel6\\r'
 if [ ! -d /packages/el6 ]; then
     mkdir /packages/el6
 fi
