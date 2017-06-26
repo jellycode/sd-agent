@@ -23,12 +23,12 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
-if [ ! -d /packages/el6 ]; then
-    mkdir /packages/el6
+if [ ! -d /packages/el6_i386 ]; then
+    mkdir /packages/el6_i386
 fi
 
-if [ ! -d /packages/el6/src ]; then
-    mkdir /packages/el6/src
+if [ ! -d /packages/el6_i386/src ]; then
+    mkdir /packages/el6_i386/src
 fi
-cp -r /root/el/RPMS/* /packages/el6
-cp -r /root/el/SRPMS/* /packages/el6/src
+cp -r /root/el/RPMS/* /packages/el6_i386
+cp -r /root/el/SRPMS/* /packages/el6_i386/src
