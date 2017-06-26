@@ -1,4 +1,5 @@
 #!/bin/bash -xe
+echo -en "travis_fold:start:create_folders\\r"
 cat > $HOME/.rpmmacros << EOF_MACROS
 %_topdir /root/el
 %_tmppath %{_topdir}/tmp
@@ -6,29 +7,43 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
+
 mkdir /root/el
 cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
 done
+echo -en "travis_fold:end:create_folders\\r"
+echo -en "travis_fold:start:check_agent_version\\r"
 sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' /sd-agent/config.py)
+echo -en "travis_fold:end:check_agent_version\\r"
+echo -en "travis_fold:start:unpack_agent\\r"
 tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz /sd-agent
 cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
 cd /root/el
 chown -R `id -u`:`id -g` /root/el
+echo -en 'travis_fold:end:unpack_agent\\r'
+echo -en 'travis_fold:start:build_rhel6-i386\\r'
 function build {
     rpmdir=/root/build/result/$1
     yum-builddep -y SPECS/sd-agent-$1.spec
-    rpmbuild -ba SPECS/sd-agent-$1.spec && \
+    linux32 rpmbuild -ba SPECS/sd-agent-$1.spec && \
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
-if [ ! -d /packages/el6_i386 ]; then
-    mkdir /packages/el6_i386
+echo -en 'travis_fold:end:build_rhel6-i386\\r'
+echo -en 'travis_fold:start:copy_packages\\r'
+if [ ! -d /packages/el ]; then
+    mkdir /packages/el
 fi
 
-if [ ! -d /packages/el6_i386/src ]; then
-    mkdir /packages/el6_i386/src
+if [ ! -d /packages/el/6 ]; then
+    mkdir /packages/el/6
 fi
-cp -r /root/el/RPMS/* /packages/el6_i386
-cp -r /root/el/SRPMS/* /packages/el6_i386/src
+
+if [ ! -d /packages/src ]; then
+    mkdir /packages/src
+fi
+cp -r /root/el/RPMS/* /packages/el/6
+cp -r /root/el/SRPMS/* /packages/src
+echo -en 'travis_fold:end:copy_packages\\r'
