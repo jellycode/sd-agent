@@ -11,12 +11,11 @@ if [ ! -d "$PACKAGES_DIR" ]; then
 fi
 
 echo -en "travis_fold:start:deb_packaging\\r"
-apt-get update && apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static && mkdir /root/agent-pkg-debian
+sudo apt-get update && sudo apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static && sudo mkdir /root/agent-pkg-debian
 for arch in amd64 i386 armel armhf;
 do
     pbuilder-dist precise $arch create;
 done
-sh /root/pbuilder-bootstrap.sh
 dpkg-source -b /build/src/sd-agent
 for arch in amd64 i386 armel armhf; do
     pbuilder-dist precise $arch build \
