@@ -17,7 +17,9 @@ for arch in amd64 i386 armel armhf;
 do
     pbuilder-dist precise $arch create;
 done
+cd /
 dpkg-source -b "$TRAVIS_BUILD_DIR"
+cd "$TRAVIS_BUILD_DIR"
 for arch in amd64 i386 armel armhf; do
     pbuilder-dist precise $arch build \
     --buildresult "$PACKAGES_DIR"/ubuntu/pool/main/s/sd-agent/ *.dsc
