@@ -2,13 +2,16 @@
 
 DOCKERFILE_DIR=".travis/dockerfiles/"
 PACKAGES_DIR="/packages"
-
+DPKG_SOURCE_LOCATION="~/sd-agent"
 set -ev
 
 cd .travis/dockerfiles
 
 if [ ! -d "$PACKAGES_DIR" ]; then
     sudo mkdir "$PACKAGES_DIR"
+fi
+if [ ! -d "$DPKG_SOURCE_LOCATION" ]; then
+    sudo mkdir "$DPKG_SOURCE_LOCATION"
 fi
 
 echo -en "travis_fold:start:deb_packaging\\r"
@@ -17,9 +20,8 @@ for arch in amd64 i386 armel armhf;
 do
     pbuilder-dist precise $arch create;
 done
-cd /
-dpkg-source -b "$TRAVIS_BUILD_DIR"
-cd "$TRAVIS_BUILD_DIR"
+sudo cp -r "$TRAVIS_BUILD_DIR" "$DPKG_SOURCE_LOCATION"
+sudo dpkg-source -b "$DPKG_SOURCE_LOCATION"
 for arch in amd64 i386 armel armhf; do
     pbuilder-dist precise $arch build \
     --buildresult "$PACKAGES_DIR"/ubuntu/pool/main/s/sd-agent/ *.dsc
