@@ -2,6 +2,7 @@
 
 DOCKERFILE_DIR=".travis/dockerfiles/"
 PACKAGES_DIR="/packages"
+
 set -ev
 
 cd .travis/dockerfiles
@@ -11,7 +12,7 @@ if [ ! -d "$PACKAGES_DIR" ]; then
 fi
 
 echo -en "travis_fold:start:deb_packaging\\r"
-sudo apt-get update && sudo apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static && sudo mkdir /root/agent-pkg-debian
+sudo apt-get update && sudo apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static
 for arch in amd64 i386 armel armhf;
 do
     pbuilder-dist precise $arch create;
