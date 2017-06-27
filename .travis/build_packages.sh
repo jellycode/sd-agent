@@ -2,7 +2,7 @@
 
 DOCKERFILE_DIR=".travis/dockerfiles/"
 PACKAGES_DIR="/packages"
-DPKG_SOURCE_LOCATION="~/sd-agent"
+DPKG_SOURCE_LOCATION="$HOME/sd-agent"
 set -ev
 
 cd .travis/dockerfiles
