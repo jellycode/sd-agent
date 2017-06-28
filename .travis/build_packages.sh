@@ -18,11 +18,14 @@ do
     && echo -en "travis_fold:end:build_${d}_container\\r"
 done
 
-for d in .travis/dockerfiles/* ;
+for d in * ;
 do
     PRIVILEGED=""
     if [[ "$d" == "precise" ]]; then
         PRIVILEGED="--privileged"
+        echo "Using --privileged"
+    else
+        echo "Not using --privileged"
     fi
     echo -en "travis_fold:start:run_${d}_container\\r" \
     && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw "${PRIVILEGED}" serverdensity:"${d}" \
