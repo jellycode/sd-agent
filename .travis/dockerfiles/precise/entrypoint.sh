@@ -10,6 +10,9 @@ echo -en "travis_fold:end:pbuilder-bootstrap\\r"
 echo -en "travis_fold:start:dpkg-source\\r"
 for arch in amd64 i386 armel armhf; do
     echo -en "travis_fold:start:${arch}\\r"
+    if [ ! -d /packages/precise ]; then
+        mkdir /packages/precise
+    fi
     if [ ! -d /packages/precise/$arch ]; then
         mkdir /packages/precise/$arch
     fi

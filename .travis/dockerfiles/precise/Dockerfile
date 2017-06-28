@@ -1,6 +1,6 @@
 FROM ubuntu:precise
 WORKDIR /root
-RUN apt-get update && apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static && mkdir /root/agent-pkg-debian
+RUN apt-get update && apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static
 RUN echo 'for arch in amd64 i386 armel armhf; do pbuilder-dist precise $arch create; done' > /root/pbuilder-bootstrap.sh
 COPY ./entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
