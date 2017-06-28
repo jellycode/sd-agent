@@ -20,17 +20,17 @@ done
 
 for d in * ;
 do
-    PRIVILEGED=""
     if [[ "$d" == "precise" ]]; then
-        PRIVILEGED="--privileged"
-        echo "Using --privileged"
+        echo -en "travis_fold:start:run_${d}_container\\r" \
+        && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}" \
+        && ls /packages \
+        && echo -en "travis_fold:end:run_${d}_container\\r"
     else
-        echo "Not using --privileged"
+        echo -en "travis_fold:start:run_${d}_container\\r" \
+        && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d}" \
+        && ls /packages \
+        && echo -en "travis_fold:end:run_${d}_container\\r"
     fi
-    echo -en "travis_fold:start:run_${d}_container\\r" \
-    && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw "${PRIVILEGED}" serverdensity:"${d}" \
-    && ls /packages \
-    && echo -en "travis_fold:end:run_${d}_container\\r"
 done
 
 find /packages
