@@ -23,7 +23,7 @@ cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
 cd /root/el
 chown -R `id -u`:`id -g` /root/el
 echo -en 'travis_fold:end:unpack_agent\\r'
-echo -en 'travis_fold:start:build_rhel6-i386\\r'
+echo -en 'travis_fold:start:build_el6-i386\\r'
 function build {
     rpmdir=/root/build/result/$1
     yum-builddep -y SPECS/sd-agent-$1.spec
@@ -31,7 +31,7 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
-echo -en 'travis_fold:end:build_rhel6-i386\\r'
+echo -en 'travis_fold:end:build_el6-i386\\r'
 echo -en 'travis_fold:start:copy_packages\\r'
 if [ ! -d /packages/el ]; then
     mkdir /packages/el

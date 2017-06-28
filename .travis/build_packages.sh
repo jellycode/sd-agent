@@ -2,42 +2,37 @@
 
 DOCKERFILE_DIR=".travis/dockerfiles/"
 PACKAGES_DIR="/packages"
-DPKG_SOURCE_LOCATION="$HOME/sd-agent"
 set -ev
-
 cd .travis/dockerfiles
 
 if [ ! -d "$PACKAGES_DIR" ]; then
     sudo mkdir "$PACKAGES_DIR"
 fi
-if [ ! -d "$DPKG_SOURCE_LOCATION" ]; then
-    sudo mkdir "$DPKG_SOURCE_LOCATION"
-fi
 
-echo -en "travis_fold:start:deb_packaging\\r"
-sudo apt-get update && sudo apt-get install -y pbuilder debootstrap devscripts ubuntu-dev-tools qemu qemu-user-static
-for arch in amd64 i386 armel armhf;
+for d in * ;
 do
-    pbuilder-dist precise $arch create;
+    echo -en "travis_fold:start:build_${d}_container\\r" \
+    && cd "$d" \
+    && docker build -t serverdensity:"${d}" . \
+    && cd .. \
+    && echo -en "travis_fold:end:build_${d}_container\\r"
 done
-sudo cp -r "$TRAVIS_BUILD_DIR" "$DPKG_SOURCE_LOCATION"
-sudo dpkg-source -b "$DPKG_SOURCE_LOCATION"
-for arch in amd64 i386 armel armhf; do
-    pbuilder-dist precise $arch build \
-    --buildresult "$PACKAGES_DIR"/ubuntu/pool/main/s/sd-agent/ *.dsc
-done
-
-find /packages
-echo -en "travis_fold:end:deb_packaging\\r"
-
-
-echo -en "travis_fold:start:rpm_packaging\\r"
-for d in * ; do (echo -en "travis_fold:start:build_${d}_container\\r" && cd "$d" && docker build -t serverdensity:"${d}" . && cd .. && echo -en "travis_fold:end:build_${d}_container\\r"); done
 
 cd "$TRAVIS_BUILD_DIR"
 
-for d in .travis/dockerfiles/* ; do (echo -en "travis_fold:start:run_${d#$DOCKERFILE_DIR}_container\\r" && sudo docker run --volume=/home/travis/build/serverdensity/sd-agent:/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d#$DOCKERFILE_DIR}" && ls /packages && echo -en "travis_fold:end:run_${d#$DOCKERFILE_DIR}_container\\r"); done
+for d in .travis/dockerfiles/* ;
+do
+    PRIVILEGED=""
+    BUILD_OS=${d#$DOCKERFILE_DIR}
+    if [[ "${BUILD_OS}" == "precise" ]]; then
+        PRIVILEGED="--privileged"
+    fi
+    echo -en "travis_fold:start:run_${BUILD_OS}_container\\r" \
+    && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw \
+        --volume=/packages:/packages:rw "${PRIVILEGED}"  \
+        serverdensity:"${BUILD_OS}" \
+    && ls /packages \
+    && echo -en "travis_fold:end:run_${BUILD_OS}_container\\r"
+done
 
 find /packages
-echo -en "travis_fold:end:rpm_packaging\\r"
-
