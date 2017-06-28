@@ -18,21 +18,16 @@ do
     && echo -en "travis_fold:end:build_${d}_container\\r"
 done
 
-cd "$TRAVIS_BUILD_DIR"
-
 for d in .travis/dockerfiles/* ;
 do
     PRIVILEGED=""
-    BUILD_OS=${d#$DOCKERFILE_DIR}
-    if [[ "${BUILD_OS}" == "precise" ]]; then
+    if [[ "$d" == "precise" ]]; then
         PRIVILEGED="--privileged"
     fi
-    echo -en "travis_fold:start:run_${BUILD_OS}_container\\r" \
-    && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw \
-        --volume=/packages:/packages:rw "${PRIVILEGED}"  \
-        serverdensity:"${BUILD_OS}" \
+    echo -en "travis_fold:start:run_${d}_container\\r" \
+    && sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw "${PRIVILEGED}" serverdensity:"${d}" \
     && ls /packages \
-    && echo -en "travis_fold:end:run_${BUILD_OS}_container\\r"
+    && echo -en "travis_fold:end:run_${d}_container\\r"
 done
 
 find /packages
