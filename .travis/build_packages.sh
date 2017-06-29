@@ -22,7 +22,7 @@ do
         docker build -t serverdensity:"${d}" .
         cd ..
         if [ ! -f $"$CACHE_FILE_${d}"  ]; then
-            docker save serverdensity:${d} | gzip > ${CACHE_FILE_${d}};
+            docker save serverdensity:${d} | gzip > "$CACHE_FILE_${d}";
         fi
     fi
 
@@ -43,7 +43,3 @@ do
 done
 
 find /packages
-
-
-        TEMP="\${CACHE_FILE_}${d}"
-        MIN_VERSION=$(eval echo "$TEMP")
