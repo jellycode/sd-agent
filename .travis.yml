@@ -5,11 +5,6 @@ python:
   - 2.7
 services:
   - docker
-cache:
-  directories:
-    - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
-    - vendor/cache
-
 env:
   global:
     - CONCURRENCY=2
@@ -90,7 +85,11 @@ env:
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.4.7
     #- TRAVIS_FLAVOR=zookeeper FLAVOR_VERSION=3.3.6
   fast_finish: true
-
+cache:
+  directories:
+    - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
+    - vendor/cache
+    - $CACHE_DIR
 
 before_install: echo "OVERRIDING TRAVIS STEPS"
 install: echo "OVERRIDING TRAVIS STEPS"

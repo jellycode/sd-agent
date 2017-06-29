@@ -15,14 +15,16 @@ fi
 for d in * ;
 do
     echo -en "travis_fold:start:build_${d}_container\\r"
-    if [ -f "$CACHE_FILE_${d}"  ]; then
-        gunzip -c "$CACHE_FILE_${d}" | docker load;
+    TEMP="\${CACHE_FILE_${d}}"
+    DOCKER_CACHE=$(eval echo "$TEMP")
+    if [ -f "$DOCKER_CACHE"  ]; then
+        gunzip -c "$DOCKER_CACHE" | docker load;
     else
         cd "$d"
         docker build -t serverdensity:"${d}" .
         cd ..
-        if [ ! -f $"$CACHE_FILE_${d}"  ]; then
-            docker save serverdensity:${d} | gzip > "$CACHE_FILE_${d}";
+        if [ ! -f "$DOCKER_CACHE"  ]; then
+            docker save serverdensity:${d} | gzip > "$DOCKER_CACHE";
         fi
     fi
 
