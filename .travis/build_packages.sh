@@ -55,6 +55,14 @@ sudo cp -a "$PACKAGES_DIR"/el "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
 createrepo 6
 createrepo 7
+#cat << EOF > ~/.rpmmacros
+#%_topdir /tmp/el
+#%_tmppath %{_topdir}/tmp
+#%_signature gpg
+#%_gpg_name hello@serverdensity.com
+#%_gpg_path ~/.gnupg
+#EOF
+#LC_ALL=C rpm --addsign 6/*/*.rpm 7/*/*.rpm
 
 # Prepare deb packages as repo
 if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
