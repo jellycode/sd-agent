@@ -51,7 +51,11 @@ if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
 # Prepare el packages as repo
-sudo cp -a "$PACKAGES_DIR"/el "$REPOSITORY_DIR"/el
+if [ ! -d "$REPOSITORY_DIR"/el ]; then
+    sudo mkdir "$REPOSITORY_DIR"/el
+fi
+sudo cp -a "$PACKAGES_DIR"/el6 "$REPOSITORY_DIR"/el/6
+sudo cp -a "$PACKAGES_DIR"/el7 "$REPOSITORY_DIR"/el/7
 cd "$REPOSITORY_DIR"/el
 createrepo 6
 createrepo 7
@@ -70,12 +74,10 @@ if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
 fi
 
 cd "$REPOSITORY_DIR"/ubuntu
-cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/* /archive/conf
+cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/* "$REPOSITORY_DIR"/conf
 #FOR TESTING
-sed -i '/SignWith: 131EFC09/d' /archive/conf/distributions
-sed -i '/ask-passphrase/d' /archive/conf/options
-
+sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/conf/distributions
+sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/conf/options
 reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
-
 
 find "$REPOSITORY_DIR"
