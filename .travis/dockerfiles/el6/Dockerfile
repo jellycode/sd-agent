@@ -1,5 +1,5 @@
 FROM centos:6
-RUN yum -y install yum-utils rpm-build redhat-rpm-config make gcc  python-devel wget curl libyaml-devel curl-devel postgresql-devel tar scl-utils
+RUN yum -y install yum-utils rpm-build redhat-rpm-config make gcc  python-devel wget curl libyaml-devel curl-devel postgresql-devel tar symlinks scl-utils
 RUN yum -y install centos-release-scl-rh
 RUN yum -y install python27
 RUN ( grep -q :20: /etc/group || groupadd -g 20 osx_staff ) && \
