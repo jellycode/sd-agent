@@ -2,9 +2,11 @@
 
 DOCKERFILE_DIR=".travis/dockerfiles/"
 PACKAGES_DIR="/packages"
+REPOSITORY_DIR="/archive"
 set -ev
-cd .travis/dockerfiles
+cd "$DOCKERFILE_DIR"
 
+#Create required folders if they do not already exist
 if [ ! -d "$PACKAGES_DIR" ]; then
     sudo mkdir "$PACKAGES_DIR"
 fi
@@ -12,6 +14,7 @@ if [ ! -d "$CACHE_DIR" ]; then
     sudo mkdir "$CACHE_DIR"
 fi
 
+#If the containers are in cache, load them, else create containers (They should be in cache already)
 for d in * ;
 do
     echo -en "travis_fold:start:build_${d}_container\\r"
@@ -20,17 +23,16 @@ do
     if [ -f "$DOCKER_CACHE"  ]; then
         gunzip -c "$DOCKER_CACHE" | docker load;
     else
-        cd "$d"
-        docker build -t serverdensity:"${d}" .
-        cd ..
+        (cd "$d" && docker build -t serverdensity:"${d}" .)
         if [ ! -f "$DOCKER_CACHE"  ]; then
-            docker save serverdensity:${d} | gzip > "$DOCKER_CACHE";
+            docker save serverdensity:"${d}" | gzip > "$DOCKER_CACHE";
         fi
     fi
 
     echo -en "travis_fold:end:build_${d}_container\\r"
 done
 
+#Run the containers, if container name is precise run with --privileged
 for d in * ;
 do
     if [[ "$d" == "precise" ]]; then
@@ -44,4 +46,28 @@ do
     fi
 done
 
-find /packages
+# Prepare folder to be come the repository
+if [ ! -d "$REPOSITORY_DIR" ]; then
+    sudo mkdir "$REPOSITORY_DIR"
+fi
+# Prepare el packages as repo
+sudo cp -a "$PACKAGES_DIR"/el "$REPOSITORY_DIR"/el
+cd "$REPOSITORY_DIR"/el
+createrepo 6
+createrepo 7
+
+# Prepare deb packages as repo
+if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
+    sudo mkdir "$REPOSITORY_DIR"/ubuntu
+fi
+
+cd "$REPOSITORY_DIR"/ubuntu
+cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/* /archive/conf
+#FOR TESTING
+sed -i '/SignWith: 131EFC09/d' /archive/conf/distributions
+sed -i '/ask-passphrase/d' /archive/conf/options
+
+reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
+
+
+find "$REPOSITORY_DIR"
