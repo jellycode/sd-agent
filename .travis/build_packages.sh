@@ -35,6 +35,7 @@ done
 #Run the containers, if container name is precise run with --privileged
 for d in * ;
 do
+    echo "$d"
     if [[ "$d" == "precise" ]]; then
         echo -en "travis_fold:start:run_${d}_container\\r"
         sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}"
