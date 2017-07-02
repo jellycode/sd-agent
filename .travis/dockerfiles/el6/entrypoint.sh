@@ -25,6 +25,7 @@ cd /root/el
 chown -R `id -u`:`id -g` /root/el
 echo -en 'travis_fold:end:unpack_agent\\r'
 echo -en 'travis_fold:start:build_el6\\r'
+source /opt/rh/python27/enable
 function build {
     rpmdir=/root/build/result/$1
     yum-builddep -y SPECS/sd-agent-$1.spec
