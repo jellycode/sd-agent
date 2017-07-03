@@ -59,7 +59,7 @@ fi
 if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
     sudo mkdir "$REPOSITORY_DIR"/ubuntu
 fi
-cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/conf
+sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/conf
 
 sudo chmod -R 775 "$REPOSITORY_DIR"
 
