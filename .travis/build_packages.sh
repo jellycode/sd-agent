@@ -83,8 +83,26 @@ sudo createrepo 7
 # Prepare deb packages as repo
 cd "$REPOSITORY_DIR"/ubuntu
 #FOR TESTING
-sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/conf/distributions
-sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/conf/options
+sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
+sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
+if [ ! -d "$REPOSITORY_DIR"/el/5 ]; then
+    sudo mkdir "$REPOSITORY_DIR"/el/5
+    sudo mkdir "$REPOSITORY_DIR"/el/5/x86_64
+    sudo mkdir "$REPOSITORY_DIR"/el/5/i386
+    sudo mkdir "$REPOSITORY_DIR"/el/5/repodata
+fi
+for arch in x86_64 i386;
+do
+    wget http://archive.serverdensity.com/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm -O "$REPOSITORY_DIR"/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm
+    for plugin in apache btrfs consul couchbase couchdb directory docker elastic haproxy hdfs kafka-consumer memcache mongo mysql nginx ntp phpfpm postfix postgresql rabbitmq redis riak supervisord varnish zookeeper;
+    do
+        wget http://archive.serverdensity.com/el/5/"$arch"/sd-agent-"$plugin"-2.1.5-1."$arch".rpm -O "$REPOSITORY_DIR"/el/5/"$arch"/sd-agent-"$plugin"-2.1.5-1."$arch".rpm
+    done
+done
+
+
+cd "$REPOSITORY_DIR"/el
+sudo createrepo 5
 find "$REPOSITORY_DIR"
