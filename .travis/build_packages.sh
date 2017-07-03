@@ -55,9 +55,9 @@ fi
 if [ ! -d "$REPOSITORY_DIR"/el ]; then
     sudo mkdir "$REPOSITORY_DIR"/el
 fi
-sudo cp -a "$PACKAGES_DIR"/el6 "$REPOSITORY_DIR"/el/6
-sudo cp -a "$PACKAGES_DIR"/el7 "$REPOSITORY_DIR"/el/7
+sudo cp -a "$PACKAGES_DIR"/el "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
+ls -alh
 createrepo 6
 createrepo 7
 #cat << EOF > ~/.rpmmacros
