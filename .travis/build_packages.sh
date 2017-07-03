@@ -61,11 +61,12 @@ if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
 fi
 sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/conf
 
-sudo chmod -R 775 "$REPOSITORY_DIR"
+
 
 # Prepare el packages as repo
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
+sudo chmod -R 775 "$REPOSITORY_DIR"
 cd "$REPOSITORY_DIR"/el
 find "$REPOSITORY_DIR"
 createrepo 6
