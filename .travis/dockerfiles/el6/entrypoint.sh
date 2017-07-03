@@ -6,7 +6,6 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
-echo -en "travis_fold:start:create_folders\\r"
 if [ ! -d /root/el ]; then
     mkdir /root/el
 fi
@@ -14,18 +13,11 @@ cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
 done
-echo -en "travis_fold:end:create_folders\\r"
-echo -en "travis_fold:start:check_agent_version\\r"
 sd_agent_version=$(awk -F'"' '/^AGENT_VERSION/ {print $2}' /sd-agent/config.py)
-echo -en "travis_fold:end:check_agent_version\\r"
-echo -en "travis_fold:start:unpack_agent\\r"
 tar -czf /root/el/SOURCES/sd-agent-${sd_agent_version}.tar.gz /sd-agent
 cp -a /sd-agent/packaging/el/{SPECS,inc,description} /root/el
 cd /root/el
 chown -R `id -u`:`id -g` /root/el
-echo -en 'travis_fold:end:unpack_agent\\r'
-echo -en 'travis_fold:start:build_el6\\r'
-source /opt/rh/python27/enable
 function build {
     rpmdir=/root/build/result/$1
     yum-builddep -y SPECS/sd-agent-$1.spec
@@ -34,8 +26,6 @@ function build {
 }
 
 build "el6"
-echo -en 'travis_fold:end:build_el6\\r'
-echo -en 'travis_fold:start:copy_packages\\r'
 if [ ! -d /packages/el ]; then
     mkdir /packages/el
 fi
@@ -49,4 +39,3 @@ if [ ! -d /packages/src ]; then
 fi
 cp -r /root/el/RPMS/* /packages/el/6
 cp -r /root/el/SRPMS/* /packages/src
-echo -en 'travis_fold:end:copy_packages\\r'

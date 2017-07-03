@@ -6,8 +6,9 @@ cat > $HOME/.rpmmacros << EOF_MACROS
 %_gpg_name hello@serverdensity.com
 %_gpg_path ~/.gnupg
 EOF_MACROS
-sed -i 's|/opt/rh/python27/root/usr/bin/python|python2.7|' /sd-agent/packaging/el/SPECS/sd-agent-el6.spec
-mkdir /root/el
+if [ ! -d /root/el ]; then
+    mkdir /root/el
+fi
 cd /root/el
 for dir in SOURCES BUILD RPMS SRPMS tmp; do
     [ -d $dir ] || mkdir $dir
@@ -24,12 +25,16 @@ function build {
     (test -d $rpmdir || mkdir -p $rpmdir) && cp -a /root/el/RPMS/* $rpmdir
 }
 build "el6"
-if [ ! -d /packages/el6_i386 ]; then
-    mkdir /packages/el6_i386
+if [ ! -d /packages/el ]; then
+    mkdir /packages/el
 fi
 
-if [ ! -d /packages/el6_i386/src ]; then
-    mkdir /packages/el6_i386/src
+if [ ! -d /packages/el/6 ]; then
+    mkdir /packages/el/6
 fi
-cp -r /root/el/RPMS/* /packages/el6_i386
-cp -r /root/el/SRPMS/* /packages/el6_i386/src
+
+if [ ! -d /packages/src ]; then
+    mkdir /packages/src
+fi
+cp -r /root/el/RPMS/* /packages/el/6
+cp -r /root/el/SRPMS/* /packages/src
