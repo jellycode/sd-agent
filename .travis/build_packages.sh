@@ -66,11 +66,11 @@ sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/conf
 # Prepare el packages as repo
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
-sudo chmod -R 775 "$REPOSITORY_DIR"
+sudo chmod -R 0775 "$REPOSITORY_DIR"
 cd "$REPOSITORY_DIR"/el
 find "$REPOSITORY_DIR"
-createrepo 6
-createrepo 7
+sudo createrepo 6
+sudo createrepo 7
 #cat << EOF > ~/.rpmmacros
 #%_topdir /tmp/el
 #%_tmppath %{_topdir}/tmp
