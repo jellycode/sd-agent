@@ -92,9 +92,9 @@ cd "$REPOSITORY_DIR"/ubuntu
 #FOR TESTING
 sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
 sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
-reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
+sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
-
+#Get el5 repo as we are no longer building packages for it.
 for arch in x86_64 i386;
 do
     wget http://archive.serverdensity.com/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm -O "$REPOSITORY_DIR"/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm
@@ -103,8 +103,10 @@ do
         wget http://archive.serverdensity.com/el/5/"$arch"/sd-agent-"$plugin"-2.1.5-1."$arch".rpm -O "$REPOSITORY_DIR"/el/5/"$arch"/sd-agent-"$plugin"-2.1.5-1."$arch".rpm
     done
 done
-
+for file in 17d94a8defa9605ca412dbdbf74851de1db570db-filelists.xml.gz 2197450b28e2ff77d7a0eb72372e85cd83d4e917-primary.sqlite.bz2 609fcb039fac036236b24f412acf1f916d805b73-primary.xml.gz 8fb13b674c6eb2dbefbfdadbf1b922e2e15208e3-filelists.sqlite.bz2 b0d70975130c75e61c511b880f2549a269df9493-other.xml.gz ecb0c3fcf1d8d86a19367730085c7a67bdd79e6a-other.sqlite.bz2 repomd.xml;
+do
+    wget http://archive.serverdensity.com/el/5/repodata/"$file" -O "$REPOSITORY_DIR"/el/5/repodata/"$file"
+done
 
 cd "$REPOSITORY_DIR"/el
-sudo createrepo 5
 find "$REPOSITORY_DIR"
