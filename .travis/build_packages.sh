@@ -51,10 +51,19 @@ done
 if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
-# Prepare el packages as repo
+
 if [ ! -d "$REPOSITORY_DIR"/el ]; then
     sudo mkdir "$REPOSITORY_DIR"/el
 fi
+
+if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
+    sudo mkdir "$REPOSITORY_DIR"/ubuntu
+fi
+cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/conf
+
+sudo chmod -R 775 "$REPOSITORY_DIR"
+
+# Prepare el packages as repo
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
@@ -71,12 +80,7 @@ createrepo 7
 #LC_ALL=C rpm --addsign 6/*/*.rpm 7/*/*.rpm
 
 # Prepare deb packages as repo
-if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
-    sudo mkdir "$REPOSITORY_DIR"/ubuntu
-fi
-
 cd "$REPOSITORY_DIR"/ubuntu
-cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/* "$REPOSITORY_DIR"/conf
 #FOR TESTING
 sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/conf/distributions
 sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/conf/options
