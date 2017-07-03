@@ -55,6 +55,7 @@ fi
 if [ ! -d "$REPOSITORY_DIR"/el ]; then
     sudo mkdir "$REPOSITORY_DIR"/el
 fi
+ls -alh "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
 ls -alh
