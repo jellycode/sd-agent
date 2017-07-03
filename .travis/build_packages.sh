@@ -56,17 +56,24 @@ if [ ! -d "$REPOSITORY_DIR"/el ]; then
     sudo mkdir "$REPOSITORY_DIR"/el
 fi
 
+if [ ! -d "$REPOSITORY_DIR"/el/5 ]; then
+    sudo mkdir "$REPOSITORY_DIR"/el/5
+    sudo mkdir "$REPOSITORY_DIR"/el/5/x86_64
+    sudo mkdir "$REPOSITORY_DIR"/el/5/i386
+    sudo mkdir "$REPOSITORY_DIR"/el/5/repodata
+fi
+
 if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
     sudo mkdir "$REPOSITORY_DIR"/ubuntu
 fi
+
 sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/ubuntu/conf
 
-
+sudo chmod -R 0775 "$REPOSITORY_DIR"
 
 # Prepare el packages as repo
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
-sudo chmod -R 0775 "$REPOSITORY_DIR"
 cd "$REPOSITORY_DIR"/el
 find "$REPOSITORY_DIR"
 sudo createrepo 6
@@ -87,12 +94,7 @@ sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
 sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
-if [ ! -d "$REPOSITORY_DIR"/el/5 ]; then
-    sudo mkdir "$REPOSITORY_DIR"/el/5
-    sudo mkdir "$REPOSITORY_DIR"/el/5/x86_64
-    sudo mkdir "$REPOSITORY_DIR"/el/5/i386
-    sudo mkdir "$REPOSITORY_DIR"/el/5/repodata
-fi
+
 for arch in x86_64 i386;
 do
     wget http://archive.serverdensity.com/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm -O "$REPOSITORY_DIR"/el/5/"$arch"/sd-agent-2.1.5-1."$arch".rpm
