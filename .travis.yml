@@ -17,10 +17,11 @@ env:
     - CACHE_FILE_el6_i386=$CACHE_DIR/el6_i386.tar.gz
     - CACHE_FILE_el7=$CACHE_DIR/el7.tar.gz
     - CACHE_FILE_precise=$CACHE_DIR/precise.tar.gz
+    - PACKAGE_CACHE=/archive
   matrix:
     - TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=core_integration
-    - TRAVIS_FLAVOR=checks_mock
+    #- TRAVIS_FLAVOR=checks_mock
     #- TRAVIS_FLAVOR=activemq
     #- TRAVIS_FLAVOR=apache
     #- TRAVIS_FLAVOR=cassandra FLAVOR_VERSION=2.0.13
@@ -87,6 +88,7 @@ cache:
     - $HOME/virtualenv/python$TRAVIS_PYTHON_VERSION.9
     - vendor/cache
     - $CACHE_DIR
+    - PACKAGE_CACHE
 
 before_install: echo "OVERRIDING TRAVIS STEPS"
 install: echo "OVERRIDING TRAVIS STEPS"
@@ -105,4 +107,7 @@ jobs:
       python: 2.7
     - stage: build packages
       script: travis_retry ./.travis/build_packages.sh
+      python: 2.7
+    - stage: Upload packages
+      script: travis_retry ./.travis/upload_packages.sh
       python: 2.7
