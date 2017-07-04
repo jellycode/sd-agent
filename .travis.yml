@@ -91,8 +91,9 @@ cache:
 before_install: echo "OVERRIDING TRAVIS STEPS"
 install: echo "OVERRIDING TRAVIS STEPS"
 before_script:
+  - export PATH=$HOME/.local/bin:$PATH
   - sudo apt-get --yes --no-install-recommends install binfmt-support qemu-user-static createrepo reprepro
-  - sudo pip2 install softlayer-object-storage==0.5.4
+  - pip install softlayer-object-storage==0.5.4 --user `whoami`
   - echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' | sudo tee -a /proc/sys/fs/binfmt_misc/register
 script: travis_retry ./.travis/build_installer.sh
 after_failure:
