@@ -56,6 +56,13 @@ if [ ! -d "$REPOSITORY_DIR"/el ]; then
     sudo mkdir "$REPOSITORY_DIR"/el
 fi
 
+if [ ! -d "$REPOSITORY_DIR"/el/5 ]; then
+    sudo mkdir "$REPOSITORY_DIR"/el/5
+    sudo mkdir "$REPOSITORY_DIR"/el/5/x86_64
+    sudo mkdir "$REPOSITORY_DIR"/el/5/i386
+    sudo mkdir "$REPOSITORY_DIR"/el/5/repodata
+fi
+
 if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
     sudo mkdir "$REPOSITORY_DIR"/ubuntu
 fi
