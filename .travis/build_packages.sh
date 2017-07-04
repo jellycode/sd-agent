@@ -13,9 +13,6 @@ fi
 if [ ! -d "$CACHE_DIR" ]; then
     sudo mkdir "$CACHE_DIR"
 fi
-if [ ! -d "$REPOSITORY_DIR" ]; then
-    sudo mkdir "$REPOSITORY_DIR"
-fi
 
 #If the containers are in cache, load them, else create containers (They should be in cache already)
 for d in * ;
@@ -50,7 +47,7 @@ do
     fi
 done
 
-# Prepare folder to become the repository
+# Prepare folder to be come the repository
 if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
