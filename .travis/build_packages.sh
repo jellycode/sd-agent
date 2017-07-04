@@ -34,22 +34,19 @@ done
 
 #Run the containers, if container name is precise run with --privileged
 
-sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:el6
-
-
-#for d in * ;
-#do
-#    echo "$d"
-#    if [[ "$d" == "precise" ]]; then
-#        echo -en "travis_fold:start:run_${d}_container\\r"
-#        #sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}"
-#        echo -en "travis_fold:end:run_${d}_container\\r"
-#    else
-#        echo -en "travis_fold:start:run_${d}_container\\r"
-#        sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d}"
-#        echo -en "travis_fold:end:run_${d}_container\\r"
-#    fi
-#done
+for d in * ;
+do
+    echo "$d"
+    if [[ "$d" == "precise" ]]; then
+        echo -en "travis_fold:start:run_${d}_container\\r"
+        sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}"
+        echo -en "travis_fold:end:run_${d}_container\\r"
+    else
+        echo -en "travis_fold:start:run_${d}_container\\r"
+        sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d}"
+        echo -en "travis_fold:end:run_${d}_container\\r"
+    fi
+done
 
 # Prepare folder to be come the repository
 if [ ! -d "$REPOSITORY_DIR" ]; then
@@ -92,14 +89,12 @@ sudo createrepo 6
 # Prepare deb packages as repo
 cd "$REPOSITORY_DIR"/ubuntu
 #FOR TESTING
-#sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
-#sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
+sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
+sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 
-#sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
+sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
 find "$REPOSITORY_DIR"
 
-echo 'Now we upload the packages'
-curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}/build|export SLOS_INPUT=${REPOSITORY_DIR}|g' | /bin/sh
-
+curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=${REPOSITORY_DIR}|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
 find /tmp
