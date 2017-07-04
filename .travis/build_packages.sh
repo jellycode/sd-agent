@@ -33,19 +33,23 @@ do
 done
 
 #Run the containers, if container name is precise run with --privileged
-for d in * ;
-do
-    echo "$d"
-    if [[ "$d" == "precise" ]]; then
-        echo -en "travis_fold:start:run_${d}_container\\r"
-        #sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}"
-        echo -en "travis_fold:end:run_${d}_container\\r"
-    else
-        echo -en "travis_fold:start:run_${d}_container\\r"
-        sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d}"
-        echo -en "travis_fold:end:run_${d}_container\\r"
-    fi
-done
+
+sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:el6
+
+
+#for d in * ;
+#do
+#    echo "$d"
+#    if [[ "$d" == "precise" ]]; then
+#        echo -en "travis_fold:start:run_${d}_container\\r"
+#        #sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw --privileged serverdensity:"${d}"
+#        echo -en "travis_fold:end:run_${d}_container\\r"
+#    else
+#        echo -en "travis_fold:start:run_${d}_container\\r"
+#        sudo docker run --volume="${TRAVIS_BUILD_DIR}":/sd-agent:rw --volume=/packages:/packages:rw serverdensity:"${d}"
+#        echo -en "travis_fold:end:run_${d}_container\\r"
+#    fi
+#done
 
 # Prepare folder to be come the repository
 if [ ! -d "$REPOSITORY_DIR" ]; then
@@ -75,7 +79,7 @@ sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
 find "$REPOSITORY_DIR"
 sudo createrepo 6
-sudo createrepo 7
+#sudo createrepo 7
 #cat << EOF > ~/.rpmmacros
 #%_topdir /tmp/el
 #%_tmppath %{_topdir}/tmp
@@ -88,10 +92,10 @@ sudo createrepo 7
 # Prepare deb packages as repo
 cd "$REPOSITORY_DIR"/ubuntu
 #FOR TESTING
-sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
-sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
+#sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
+#sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 
-sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
+#sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
 find "$REPOSITORY_DIR"
 
