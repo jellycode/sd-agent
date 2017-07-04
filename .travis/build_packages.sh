@@ -94,3 +94,8 @@ sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
 
 find "$REPOSITORY_DIR"
+
+echo 'Now we upload the packages'
+curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}/build|export SLOS_INPUT=${REPOSITORY_DIR}|g' | /bin/sh
+
+find /tmp
