@@ -2,6 +2,13 @@ sudo: required
 language: python
 services:
   - docker
+
+matrix:
+  include:
+    - os: osx
+      language: generic
+      python:
+      env: TRAVIS_FLAVOR=default
 env:
   global:
     - CONCURRENCY=2
@@ -19,7 +26,7 @@ env:
     - CACHE_FILE_precise=$CACHE_DIR/precise.tar.gz
   matrix:
     - TRAVIS_FLAVOR=default
-    #- TRAVIS_FLAVOR=core_integration
+    - TRAVIS_FLAVOR=core_integration
     #- TRAVIS_FLAVOR=checks_mock
     #- TRAVIS_FLAVOR=activemq
     #- TRAVIS_FLAVOR=apache
