@@ -4,11 +4,7 @@ services:
   - docker
 
 matrix:
-  include:
-    - os: osx
-      language: generic
-      python:
-      env: TRAVIS_FLAVOR=default
+
 env:
   global:
     - CONCURRENCY=2
@@ -27,6 +23,11 @@ env:
   matrix:
     - TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=core_integration
+      include:
+        - os: osx
+          language: generic
+          python:
+          env: TRAVIS_FLAVOR=default
     #- TRAVIS_FLAVOR=checks_mock
     #- TRAVIS_FLAVOR=activemq
     #- TRAVIS_FLAVOR=apache
