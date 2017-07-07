@@ -104,7 +104,7 @@ jobs:
       script: travis_retry ./.travis/build_containers.sh
       python: 2.7
     - stage: build packages
-      script: travis_retry ./.travis/build_packages.sh
+      script: if [ "${TRAVIS_OS_NAME}" != "osx" ]; then travis_retry ./.travis/build_packages.sh; elif [ "${TRAVIS_OS_NAME}" == "osx" ]; then ./packaging/darwin/build_installer.sh; fi
       python: 2.7
     - os: osx
       language: generic
