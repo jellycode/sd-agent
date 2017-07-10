@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ev
 
+REPOSITORY_DIR="/archive"
 # Build requisites
 PATH=~/Library/Python/2.7/bin:$PATH
 
@@ -248,11 +249,13 @@ fi
 
 # Add the icon
 ${DARWIN_SCRIPTS}/scripts/setIcon.py ${DARWIN_SCRIPTS}/Resources/sd-agent-installer.icns diskimage/"${PKG_NAME}"
-
+if [ ! -d "$REPOSITORY_DIR" ]; then
+    sudo mkdir -p "$REPOSITORY_DIR"/macOS
+fi
 # Package the disk image
 # This may fail sometimes due to a "Resource busy" error, in that case re-running the job usually fixes it
 hdiutil create -srcfolder diskimage -volname "Agent Installer" "sd-agent-${AGENT_VERSION}.dmg"
-mkdir -p /Users/travis/build/serverdensity/sd-agent/macOS
-#cp /Users/travis/build/serverdensity/sd-agent/sd-agent-${AGENT_VERSION}.dmg /Users/travis/build/serverdensity/sd-agent/macOS/sd-agent-latest.dmg
+
+cp sd-agent-${AGENT_VERSION}.dmg /archive/macOS/sd-agent-latest.dmg
 #curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=/Users/travis/build/serverdensity/sd-agent/macOS|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
-tar -zcvf "$CACHE_FILE_PACAKGES_MAC" /Users/travis/build/serverdensity/sd-agent/
+tar -zcvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR" .
