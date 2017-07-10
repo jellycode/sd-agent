@@ -13,11 +13,11 @@ if [ ! -d "$REPOSITORY_DIR" ]; then
 fi
 
 if [ -f "$CACHE_FILE_PACAKGES_LINUX"  ]; then
-    tar -zxvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR"
+   sudo tar -zxvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR"
 fi
 
 if [ -f "$CACHE_FILE_PACAKGES_MAC"  ]; then
-    tar -zxvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR"
+    sudo tar -zxvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR"
 fi
 
 find "$REPOSITORY_DIR"
