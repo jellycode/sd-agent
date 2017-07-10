@@ -11,8 +11,7 @@ fi
 if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
-    - CACHE_FILE_PACAKGES_LINUX=$CACHE_DIR/packages_linux.tar.gz
-    - CACHE_FILE_PACAKGES_MAC=$CACHE_DIR/packages_mac.tar.gz
+
 if [ -f "$CACHE_FILE_PACAKGES_LINUX"  ]; then
     tar -zxvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR"
 fi
