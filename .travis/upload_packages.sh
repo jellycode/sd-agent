@@ -7,7 +7,7 @@ EL5_PLUGINS=("apache" "btrfs" "consul" "couchbase" "couchdb" "directory" "docker
 EL5_REPOFILES=("17d94a8defa9605ca412dbdbf74851de1db570db-filelists.xml.gz" "2197450b28e2ff77d7a0eb72372e85cd83d4e917-primary.sqlite.bz2" "609fcb039fac036236b24f412acf1f916d805b73-primary.xml.gz" "8fb13b674c6eb2dbefbfdadbf1b922e2e15208e3-filelists.sqlite.bz2" "b0d70975130c75e61c511b880f2549a269df9493-other.xml.gz" "ecb0c3fcf1d8d86a19367730085c7a67bdd79e6a-other.sqlite.bz2" "repomd.xml")
 
 set -ev
-echo -en "travis_fold:start:create_dirs\\r"
+
 if [ ! -d "$CACHE_DIR" ]; then
     sudo mkdir "$CACHE_DIR"
 fi
@@ -15,18 +15,17 @@ fi
 if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
-echo -en "travis_fold:end:create_dirs\\r"
-echo -en "travis_fold:start:untar_packages_from_cache\\r"
-if [ -f "$CACHE_FILE_PACKAGES_LINUX"  ]; then
-    sudo tar -zxvf "$CACHE_FILE_PACKAGES_LINUX" -C "$REPOSITORY_DIR"
+
+if [ -f "$CACHE_FILE_PACAKGES_LINUX"  ]; then
+   sudo tar -zxvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR"
 fi
 
-if [ -f "$CACHE_FILE_PACKAGES_MAC"  ]; then
-    sudo tar -zxvf "$CACHE_FILE_PACKAGES_MAC" -C "$REPOSITORY_DIR"
+if [ -f "$CACHE_FILE_PACAKGES_MAC"  ]; then
+    sudo tar -zxvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR"
 fi
-echo -en "travis_fold:end:untar_packages_from_cache\\r"
 
-echo -en "travis_fold:start:grab_el5_repo\\r"
+
+
 #Get el5 repo as we are no longer building packages for it.
 for arch in ${EL5_ARCHTYPES[*]};
 do
@@ -40,11 +39,6 @@ for file in ${EL5_REPOFILES[*]};
 do
     sudo wget http://archive.serverdensity.com/el/5/repodata/"$file" -O "$REPOSITORY_DIR"/el/5/repodata/"$file"
 done
-echo -en "travis_fold:end:grab_el5_repo\\r"
-echo -en "travis_fold:start:upload_to_SLOS\\r"
-curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=${REPOSITORY_DIR}|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
-echo -en "travis_fold:end:upload_to_SLOS\\r"
-echo -en "travis_fold:start:debug_dir_contents\\r"
+
+#curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=${REPOSITORY_DIR}|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
 find "$REPOSITORY_DIR"
-find /tmp
-echo -en "travis_fold:end:debug_dir_contents\\r"
