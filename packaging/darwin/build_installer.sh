@@ -258,4 +258,4 @@ hdiutil create -srcfolder diskimage -volname "Agent Installer" "sd-agent-${AGENT
 
 sudo cp sd-agent-${AGENT_VERSION}.dmg /archive/macOS/sd-agent-latest.dmg
 #curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=/Users/travis/build/serverdensity/sd-agent/macOS|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
-tar -zcvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR" .
+tar -cvzf "$CACHE_FILE_PACKAGES_MAC" -C "$REPOSITORY_DIR" .

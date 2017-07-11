@@ -16,12 +16,12 @@ if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
 
-if [ -f "$CACHE_FILE_PACAKGES_LINUX"  ]; then
-   sudo tar -zxvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR"
+if [ -f "$CACHE_FILE_PACKAGES_LINUX"  ]; then
+   sudo tar -zxvf "$CACHE_FILE_PACKAGES_LINUX" -C "$REPOSITORY_DIR"
 fi
 
-if [ -f "$CACHE_FILE_PACAKGES_MAC"  ]; then
-    sudo tar -zxvf "$CACHE_FILE_PACAKGES_MAC" -C "$REPOSITORY_DIR"
+if [ -f "$CACHE_FILE_PACKAGES_MAC"  ]; then
+    sudo tar -zxvf "$CACHE_FILE_PACKAGES_MAC" -C "$REPOSITORY_DIR"
 fi
 
 
