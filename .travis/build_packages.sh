@@ -33,7 +33,6 @@ do
 done
 
 #Run the containers, if container name is precise run with --privileged
-
 for d in * ;
 do
     echo "$d"
@@ -48,7 +47,8 @@ do
     fi
 done
 
-# Prepare folder to be come the repository
+echo -en "travis_fold:start:prepare_folders\\r"
+# Prepare folder to become the repository
 if [ ! -d "$REPOSITORY_DIR" ]; then
     sudo mkdir "$REPOSITORY_DIR"
 fi
@@ -69,14 +69,16 @@ if [ ! -d "$REPOSITORY_DIR"/ubuntu ]; then
 fi
 
 sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/ubuntu/conf
-
+echo -en "travis_fold:end:prepare_folders\\r"
+echo -en "travis_fold:start:prepare_el_repo\\r"
 # Prepare el packages as repo
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
 find "$REPOSITORY_DIR"
 sudo createrepo 6
-#sudo createrepo 7
+sudo createrepo 7
+
 #cat << EOF > ~/.rpmmacros
 #%_topdir /tmp/el
 #%_tmppath %{_topdir}/tmp
@@ -85,7 +87,8 @@ sudo createrepo 6
 #%_gpg_path ~/.gnupg
 #EOF
 #LC_ALL=C rpm --addsign 6/*/*.rpm 7/*/*.rpm
-
+echo -en "travis_fold:end:prepare_el_repo\\r"
+echo -en "travis_fold:start:prepare_deb_repo\\r"
 # Prepare deb packages as repo
 cd "$REPOSITORY_DIR"/ubuntu
 #FOR TESTING
@@ -93,10 +96,11 @@ sed -i '/SignWith: 131EFC09/d' "$REPOSITORY_DIR"/ubuntu/conf/distributions
 sed -i '/ask-passphrase/d' "$REPOSITORY_DIR"/ubuntu/conf/options
 
 sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKAGES_DIR"/precise/i386/sd-agent*i386*.deb
+echo -en "travis_fold:end:prepare_deb_repo\\r"
 
+echo -en "travis_fold:start:tar_repo_data_for_cache\\r"
+tar -zcvf "$CACHE_FILE_PACKAGES_LINUX" -C "$REPOSITORY_DIR" .
+echo -en "travis_fold:end:tar_repo_data_for_cache\\r"
+echo -en "travis_fold:start:debug_dir_contents\\r"
 find "$REPOSITORY_DIR"
-
-#curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=${REPOSITORY_DIR}|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
-find /tmp
-
-tar -zcvf "$CACHE_FILE_PACAKGES_LINUX" -C "$REPOSITORY_DIR" .
+echo -en "travis_fold:end:debug_dir_contents\\r"
