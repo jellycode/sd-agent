@@ -74,9 +74,9 @@ sudo cp -a "$TRAVIS_BUILD_DIR"/packaging/ubuntu/conf/. "$REPOSITORY_DIR"/ubuntu/
 find "$PACKAGES_DIR"
 sudo cp -a "$PACKAGES_DIR"/el/. "$REPOSITORY_DIR"/el
 cd "$REPOSITORY_DIR"/el
-find "$REPOSITORY_DIR"
+
 sudo createrepo 6
-#sudo createrepo 7
+sudo createrepo 7
 #cat << EOF > ~/.rpmmacros
 #%_topdir /tmp/el
 #%_tmppath %{_topdir}/tmp
@@ -96,7 +96,6 @@ sudo reprepro includedeb all "$PACKAGES_DIR"/precise/amd64/sd-agent*.deb "$PACKA
 
 find "$REPOSITORY_DIR"
 
-#curl -H "Authorization: token ${GITHUB_TOKEN}" -H 'Accept: application/vnd.github.v3.raw' -L https://api.github.com/repos/serverdensity/travis-softlayer-object-storage/contents/bootstrap-generic.sh | sed 's|export SLOS_INPUT=${TRAVIS_BUILD_DIR}|export SLOS_INPUT=${REPOSITORY_DIR}|g' | sed 's:export SLOS_NAME=`echo "${TRAVIS_REPO_SLUG}" | cut -f 2 -d /`:export SLOS_NAME=agent-repo:g' | /bin/sh
 find /tmp
 
 tar -zcvf "$CACHE_FILE_PACKAGES_LINUX" -C "$REPOSITORY_DIR" .

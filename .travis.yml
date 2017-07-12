@@ -18,7 +18,7 @@ env:
     - CACHE_FILE_el7=$CACHE_DIR/el7.tar.gz
     - CACHE_FILE_precise=$CACHE_DIR/precise.tar.gz
     - CACHE_FILE_PACKAGES_LINUX=$CACHE_DIR/packages_linux.tar.gz
-    - CACHE_FILE_PACKAGES_MAC=$CACHE_DIR/packages_mac.tar.gz
+    - CACHE_FILE_PACKAGES_MAC=$CACHE_DIR/sd-agent-latest.dmg
   matrix:
     - TRAVIS_FLAVOR=default
     - TRAVIS_FLAVOR=core_integration
